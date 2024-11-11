@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,12 +36,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User updateUser(Long id,User user) {
-        if(repository.findById(id).isEmpty()){
-            throw new UserNotFoundException("user not found");
-        }else{
-            repository.deleteById(id);
+        Optional<User> currentUser =repository.findById(id);
+        if(currentUser.isEmpty()){
+            throw new RuntimeException("user does not exist");
         }
-        User updatedUser = new User();
+        User updatedUser = currentUser.get();
         updatedUser.setId(id);
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
