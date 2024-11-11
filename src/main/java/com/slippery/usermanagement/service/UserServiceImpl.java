@@ -6,6 +6,7 @@ import com.slippery.usermanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +56,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getUserByEmail(String email) {
+        if(Objects.equals(email, "")){
+            throw new RuntimeException("email cannot be null");
+        }
         return repository.findAll().stream()
                 .filter(user->user.getEmail().toLowerCase().contains(email.toLowerCase()))
                 .collect(Collectors.toList());
